@@ -47,7 +47,7 @@ def main():
 	firstevent_traveldur = travel_time['elements'][0]
 	all_data = firstevent_traveldur.copy()
 	all_data.update(calendar_data)
-
+	
 	dist = all_data.get('distance')
 	dur = all_data.get('loc')
 	return all_data

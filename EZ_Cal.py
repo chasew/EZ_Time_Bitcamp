@@ -118,7 +118,7 @@ def main():
     with open('cal_data.json', 'w') as outfile:
         json.dump(data, outfile)'''
     credentials.revoke(httplib2.Http())
-    print(data)
+    return data
 
 if __name__ == '__main__':
     main()
