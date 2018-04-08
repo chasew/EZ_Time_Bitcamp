@@ -1,11 +1,11 @@
 from __future__ import print_function
 import httplib2
 import os
-
+import json
 from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
+from oauth2client import *
 from oauth2client.file import Storage
+
 
 import datetime
 
@@ -62,9 +62,9 @@ def main():
     service = discovery.build('calendar', 'v3', http=http)
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+
     eventsResult = service.events().list(
-        calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
+        calendarId='primary', timeMin=now, maxResults=30, singleEvents=True,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
 
@@ -75,6 +75,8 @@ def main():
     end_times = []
     locations_events = []
     break_times = []
+    dates_events = []
+    dates = []
 
 
     start_events = []
@@ -91,6 +93,7 @@ def main():
             locations_events.append(event.get('location'))
         else:
             locations_events.append('N/A')
+        dates_events.append(event['start'].get('dateTime'))
 
 
 
@@ -98,19 +101,24 @@ def main():
         name_events.append((start_events[count][1]))
         start_times.append((start_events[count][0][11:-9]))
         end_times.append((end_events[count][0][11:-9]))
+        dates.append(dates_events[count][:-15])
         count += 1
 
-    print(name_events)
+    '''print(name_events)
     print('\n')
     print(start_times)
     print('\n')
     print(end_times)
     print('\n')
-    print(locations_events)
+    print(locations_events)'''
 
-
-
-
+    data = {'events': name_events, 'start': start_times, 'end': end_times, 'loc': locations_events, 
+            'dates': dates}
+    '''print(data)
+    with open('cal_data.json', 'w') as outfile:
+        json.dump(data, outfile)'''
+    credentials.revoke(httplib2.Http())
+    return data
 
 if __name__ == '__main__':
     main()
