@@ -50,7 +50,7 @@ def main():
 
 	dist = all_data.get('distance')
 	dur = all_data.get('loc')
-	return all_data
+	print(all_data)
 
 if __name__ == '__main__':
     main()
